@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Load model
-MODEL_PATH = "////"
+MODEL_PATH = "/home/roh/s_q/Sent2-test/local_model"
 model = SentenceTransformer(MODEL_PATH, device="cpu")
 
 # Confirm device
@@ -87,16 +87,6 @@ def create_collection():
 @app.get("/")
 def health_check():
     return {"status": "ok", "model": MODEL_PATH}
-
-# Embedding endpoint
-@app.post("/embed", response_model=Response)
-def generate_embeddings(request: Request):
-    embeddings = model.encode(
-        request.sentences,
-        show_progress_bar=True,
-        convert_to_numpy=True
-    )
-    return Response(embeddings=embeddings.tolist())
 
 # Store to Typesense endpoint
 @app.post("/store", response_model=StoreResponse)
